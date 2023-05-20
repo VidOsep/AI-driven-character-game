@@ -1,7 +1,7 @@
 import openai
 
 # Set up your OpenAI API credentials
-openai.api_key = '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'
+openai.api_key = ''
 
 # Define a function to send a message to the chat model
 def send_message(message):
