@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="3">
+ <tileset firstgid="1" source="ts1.tsx"/>
+ <tileset firstgid="78" source="ts2 - Water.tsx"/>
+ <tileset firstgid="82" source="ts3 - Paths.tsx"/>
+ <tileset firstgid="98" source="ts4 - Osnovno rastlinje.tsx"/>
+ <layer id="1" name="ozadje" width="30" height="20">
+  <data encoding="base64" compression="zlib">
+   eJy1lE0OgyAQhcF22ZjUTWvS9hx6AOPS+9+mkELy8jojP+LihQjCN2+YwRpjOtIkzKF6py3IhjkL6zax/+J0CxzWosxPxI378RztTNyf+qeEG32+G3BX+r47jcS1gZXrgbnMkHKPXiNXynUud+8+NS779OMchPl5kkYlxtqaeigMzW8qvxrXcwYYS84oqedVuF9kR4+pGGr66GV+fc9s5En5Hg5yNbbER2EsWl1xjUl1prE38++X4+grvDK72+FrceT4bcnn9+YodyF+TgwtuKU5uJ7IZT7qs8ONuSt5y3JV278tuNLbcrZ8H30BOdFrfw==
+  </data>
+ </layer>
+ <layer id="3" name="okras" width="30" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBhYkAzEKWhidXjU91LBfBDIAeJcEs0ixR5qm48L0MsefKBygO0fCqACh3gPXV0xCgYKkFpujUTQTaS6JCrZ18dAWrxkk6AWXx02CkYOAAD+PQrn
+  </data>
+ </layer>
+ <layer id="2" name="poti" width="30" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYMAEYVjE6AFG7R21lxYgGogjBsjukRbWo/ZSFyTgwMPVv7jAaB6mHwCFdQIZeKDiB5t7EwfILegAAD1JEIA=
+  </data>
+ </layer>
+ <layer id="4" name="collision" width="30" height="20" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJwrZmBgKEbDDFjEsGFKAD795MqRYi+pfqClfwebvbSOX2rqGSr2YpMfSP8OZHqmxG5K9Q5kPqRGuNPLfmq7k9i6g5bhg81+UsKF0vqCFvUoOWCk2jsQGACP+y65
+  </data>
+ </layer>
+ <objectgroup id="5" name="liki">
+  <object id="1" name="starec" x="379.927" y="272.215">
+   <point/>
+  </object>
+  <object id="2" name="zacetek" x="102.815" y="196.818">
+   <point/>
+  </object>
+ </objectgroup>
+</map>

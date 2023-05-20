@@ -1,5 +1,9 @@
 import pygame
 
+WALK = 'walk'
+IDLE = 'idle'
+TALK = 'talk'
+
 class Agent:
     def __init__(self, position):
         self.position = position  # Agent's position

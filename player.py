@@ -1,11 +1,12 @@
 import pygame
+import agent
 
 # Define constants for player states
 WALK = 'walk'
 IDLE = 'idle'
 TALK = 'talk'
 
-class Player(Bitje):
+class Player(agent.Agent):
     def __init__(self, position):
         super().__init__(position)
         self.velocity = pygame.Vector2(0, 0)  # Player's velocity vector
