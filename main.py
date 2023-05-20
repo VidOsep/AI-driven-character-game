@@ -5,6 +5,11 @@ import player
 import agent
 
 
+UP = [0,-1]
+DOWN = [0,1]
+RIGHT = [1,0]
+LEFT = [-1,0]
+
 pygame.init()
 
 tile_scale = 2  # Za koliko povecamo tile
@@ -37,6 +42,16 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+    keys = pygame.key.get_pressed()
+    if keys[K_UP]:
+        player.move(UP)
+    if keys[K_DOWN]:
+        player.move(DOWN)
+    if keys[K_LEFT]:
+        player.move(LEFT)
+    if keys[K_RIGHT]:
+        player.move(RIGHT)
 
     # Clear the screen
     screen.fill((0, 0, 0))
