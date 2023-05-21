@@ -44,13 +44,13 @@ while running:
             running = False
 
     keys = pygame.key.get_pressed()
-    if keys[K_UP]:
+    if keys[pygame.K_UP]:
         player.move(UP)
-    if keys[K_DOWN]:
+    if keys[pygame.K_DOWN]:
         player.move(DOWN)
-    if keys[K_LEFT]:
+    if keys[pygame.K_LEFT]:
         player.move(LEFT)
-    if keys[K_RIGHT]:
+    if keys[pygame.K_RIGHT]:
         player.move(RIGHT)
 
     # Clear the screen

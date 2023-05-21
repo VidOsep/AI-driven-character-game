@@ -1,12 +1,14 @@
 import openai
 
 # Set up your OpenAI API credentials
-openai.api_key = ''
+f = open("key.txt", "r")
+openai.api_key = f.read()
 
 # Define a function to send a message to the chat model
 def send_message(message):
     response = openai.Completion.create(
-        engine='text-davinci-003',
+        engine='gpt-3.5-turbo',
+        messages={"role": "user", "content": "Hello!"},
         prompt=message,
         max_tokens=50,
         temperature=0.7,

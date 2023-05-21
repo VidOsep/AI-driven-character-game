@@ -1,0 +1,62 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "zacetek.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "ts1.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "ts2 - Water.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "ts3 - Paths.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "ts4 - Osnovno rastlinje.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "zacetek.tmx": {
+            "scale": 1.02125,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 243.32925336597307,
+                "y": 160.09791921664623
+            }
+        }
+    },
+    "last.imagePath": "C:/Users/vidos/Downloads/Sprout Lands - Sprites - Basic pack/Sprout Lands - Sprites - Basic pack/Objects",
+    "map.lastUsedFormat": "tmx",
+    "map.layerDataFormat": null,
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 30,
+    "openFiles": [
+        "ts1.tsx",
+        "zacetek.tmx",
+        "ts2 - Water.tsx",
+        "ts3 - Paths.tsx",
+        "ts4 - Osnovno rastlinje.tsx"
+    ],
+    "project": "lov-za-zaklad.tiled-project",
+    "recentFiles": [
+        "ts1.tsx",
+        "ts4 - Osnovno rastlinje.tsx",
+        "ts3 - Paths.tsx",
+        "ts2 - Water.tsx",
+        "zacetek.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}
