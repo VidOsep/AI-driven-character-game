@@ -8,28 +8,25 @@ class Conversation:
         # Pogovor poteka
         self.active = True
 
-        # Sistem kratkorocnega spomina
-        self.mem_len = 3
-
-        self.pre_prompt = ""
-        
-        self.messages = []
+        self.messages = []  # Shranjena preteklost pogovora
 
     def setup(self,sys_prompt):
+        # Sistemsko navodilo agentu
         self.messages.append({"role":"system","content":sys_prompt})
 
     def new_prompt(self, text):
+        # Nadaljna navodila, ki prihajajo od uporabnika
         if not self.active:
             return ""
             
-        messages.append({"role": "user", "content": text})
+        self.messages.append({"role": "user", "content": text})
         chat = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo", messages=messages
+            model="gpt-3.5-turbo-0301", messages=self.messages
         )
         reply = chat.choices[0].message.content
-        messages.append({"role": "assistant", "content": reply})
+        self.messages.append({"role": "assistant", "content": reply})
 
-        if "&" in reply:
+        if "&" or "%" in reply:
             self.end_conversation()
 
         return reply
@@ -38,7 +35,7 @@ class Conversation:
         self.active = False
 
 
-
+"""
 p1 = Conversation()
 p1.setup("Please pretend to be a character in a video game i am making. Keep your answers brief. The " \
                 "conversation will be in slovenian language. You are an old man Albert, who has information about the " \
@@ -52,3 +49,4 @@ p1.setup("Please pretend to be a character in a video game i am making. Keep you
 
 while True:
     print(p1.new_prompt(input()))
+"""
