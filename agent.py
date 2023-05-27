@@ -1,46 +1,93 @@
 import pygame
+import os
+import math
+import conversation
 
-WALK = 'walk'
-IDLE = 'idle'
-TALK = 'talk'
+IDLE_U = "idle_u"
+IDLE_D = "idle_d"
+IDLE_R = "idle_r"
+IDLE_L = "idle_l"
 
-class Agent:
-    def __init__(self, position):
-        self.position = position  # Agent's position
-        self.state = IDLE  # Initial state is idle
-        self.load_animations()  # Load animations for different states
-        self.current_animation = self.animations[self.state]  # Current animation based on state
+UP = "up"
+DOWN = "DOWN"
+RIGHT = "RIGHT"
+LEFT = "LEFT"
 
-    def load_animations(self):
-        # Load animations for different states
-        self.animations = {
-            WALK: self.load_animation('walk_animation_folder'),
-            IDLE: self.load_animation('idle_animation_folder'),
-            TALK: self.load_animation('talk_animation_folder')
-        }
+pygame.font.init()
+font = pygame.font.SysFont(None, 20)
 
-    def load_animation(self, folder):
-        # Load animation frames from the specified folder
+class Agent(pygame.sprite.Sprite):
+    """
+    Lik, zanj predpostavljamo da je staticen, torej se ne premika in ima konstantno smer.
+    """
+    def __init__(self, position, animation_path):
+        super().__init__()
+        self.position = position
+
+        self.state = IDLE_R  # Zacetni state
+        self.orientation = RIGHT
+
+        self.animation_path = animation_path
+        self.animation_frames = []
+        self.animation_frames = self.load_animation()
+        self.current_frame = self.animation_frames[0]
+        self.animation_speed = 4
+        self.t_ = 0
+        self.ix=0
+
+        self.reply = ""
+        self.offset_x=30
+        self.offset_y=-30
+
+        self.active_convo = None
+        self.setup_text = ""
+
+    def update(self,dt):
+        # Animacija
+        if self.t_/60>1/4:
+            self.next_animation()
+            self.t_=0
+        self.t_+=1
+
+    def respond_to_talk(self, text):
+        # Odziv lika na govor igralca
+        if self.active_convo is None:
+            self.active_convo=conversation.Conversation()
+            self.active_convo.setup(self.setup_text)
+        self.reply=self.active_convo.new_prompt(text)
+
+    def load_animation(self):
+        # Vrni list z slikami
         animation_frames = []
-        # Load frames using Pygame or your preferred animation library
-        # Append each frame to the animation_frames list
+        for i in range(1,5):
+            animation_frames.append(pygame.image.load(os.getcwd()+self.animation_path+str(i)+".png"))
         return animation_frames
 
-    def set_state(self, state):
-        # Set the player's state and update the current animation accordingly
-        if state in self.animations:
-            self.state = state
-            self.current_animation = self.animations[state]
+    def scale_char(self,n):
+        for i in range(len(self.animation_frames)):
+            x_size = self.animation_frames[i].get_width()
+            y_size = self.animation_frames[i].get_height()
+            img = pygame.transform.scale(self.animation_frames[i], (x_size * n, y_size * n))
+            self.animation_frames[i] = img
 
-    def play_current_animation(self):
-        # Play the current animation frame
-        # Render the current frame using Pygame or your preferred rendering method
-        pass
 
-    def respond_to_talk(self,text):
-        # Method called when the player talks with the agent
-        print("Agent: Hello! How can I assist you?")
+    def next_animation(self):
+        self.ix+=1
+        if self.ix+1>len(self.animation_frames):
+            self.ix=0
+        self.current_frame=self.animation_frames[self.ix]
 
-    def draw(self, surface):
-        # Draw the agent on the given surface at its current position
-        surface.blit(self.image, self.position)
+    def draw_text(self,screen):
+        text_surface = font.render(self.reply, False, (0,0,0))
+        text_rect = text_surface.get_rect()
+        text_rect = text_rect.move((self.position[0]+self.offset_x-5,self.position[1]+self.offset_y-5))
+        text_rect.width+=10
+        text_rect.height+=10
+        pygame.draw.rect(screen,(255,255,255),text_rect)
+        pygame.draw.rect(screen,(0,0,0),text_rect, 3)
+        screen.blit(text_surface, (self.position[0]+self.offset_x,self.position[1]+self.offset_y))
+    def draw(self,screen):
+        screen.blit(self.current_frame,self.position)
+        if self.reply!="":
+            self.draw_text(screen)
+
