@@ -4,10 +4,14 @@
  <tileset firstgid="78" source="ts2 - Water.tsx"/>
  <tileset firstgid="82" source="ts3 - Paths.tsx"/>
  <tileset firstgid="98" source="ts4 - Osnovno rastlinje.tsx"/>
- <tileset firstgid="143" source="../../../Documents/LovZaZaklad/ts5- Fence.tsx"/>
  <layer id="1" name="ozadje" width="30" height="20">
   <data encoding="base64" compression="zlib">
    eJy1lE0OgyAQhcF22ZjUTWvS9hx6AOPS+9+mkELy8jojP+LihQjCN2+YwRpjOtIkzKF6py3IhjkL6zax/+J0CxzWosxPxI378RztTNyf+qeEG32+G3BX+r47jcS1gZXrgbnMkHKPXiNXynUud+8+NS779OMchPl5kkYlxtqaeigMzW8qvxrXcwYYS84oqedVuF9kR4+pGGr66GV+fc9s5En5Hg5yNbbER2EsWl1xjUl1prE38++X4+grvDK72+FrceT4bcnn9+YodyF+TgwtuKU5uJ7IZT7qs8ONuSt5y3JV278tuNLbcrZ8H30BOdFrfw==
+  </data>
+ </layer>
+ <layer id="6" name="prehod" width="30" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIJRMBhB0UA7YBSMglFANgAAtO8Acw==
   </data>
  </layer>
  <layer id="3" name="okras" width="30" height="20">
@@ -22,16 +26,11 @@
  </layer>
  <layer id="4" name="collision" width="30" height="20" visible="0">
   <data encoding="base64" compression="zlib">
-   eJwrZmBgKEbCyKCYAKYE4NNPrhwp9pLqB1r6d7DZS+v4paaeoWIvNvmB9O9ApmdK7KZULzXCnBK7R+2nbflOrBvwieHTT4pd+OwfyPgYqfYOBAYA1n8s7Q==
-  </data>
- </layer>
- <layer id="6" name="ograja" width="30" height="20">
-  <data encoding="base64" compression="zlib">
-   eJztw7ENADAIA7D8fwH02rKyMtuSk61mzxcAAC4+tYwBzA==
+   eJwrZmBgKEbDDFjEsGFKAD795MqRYi+pfqClfwebvbSOX2rqGSr2YpMfSP8OZHqmxG5K9Q5kPqRGuNPLfmq7k9i6g5bhg81+UsKF0vqCFvUoOWCk2jsQGACP+y65
   </data>
  </layer>
  <objectgroup id="5" name="liki">
-  <object id="1" name="starec" x="228.689" y="205.389">
+  <object id="1" name="starec" x="379.927" y="272.215">
    <point/>
   </object>
   <object id="2" name="zacetek" x="102.815" y="196.818">

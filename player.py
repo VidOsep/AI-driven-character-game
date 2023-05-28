@@ -30,6 +30,7 @@ class Player(pygame.sprite.Sprite):
         self.position = position
         self.velocity = [0,0]
         self.v_max = 50
+        self.newrect = None
 
         self.in_convo_with = None
         self.min_rad = 30
@@ -43,10 +44,17 @@ class Player(pygame.sprite.Sprite):
         self.t_ = 0
         self.ix=0
 
-    def update(self,dt):
+    def update(self,dt,bg_collision):
         # Update player's position based on velocity
-        self.position[0] += self.velocity[0]*dt
-        self.position[1] += self.velocity[1]*dt
+        collides = False
+        newpos = [self.position[0] + self.velocity[0] * dt, self.position[1] + self.velocity[1] * dt]
+        self.newrect = pygame.rect.Rect(newpos, (32, 32))
+        for tile in bg_collision:
+            if pygame.Rect.colliderect(tile,self.newrect):
+                collides = True
+        if not collides:
+            self.position=newpos
+
 
         if self.t_/60>1/4:
             self.next_animation()

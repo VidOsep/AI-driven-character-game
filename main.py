@@ -18,7 +18,9 @@ tile_scale = 2  # Za koliko povecamo tile
 screen = pygame.display.set_mode((1, 1))
 
 # Zloadamo mapo
-tmx_map = pytmx.load_pygame(os.getcwd() + "\\assets\\zacetek.tmx")
+tmx_map1 = pytmx.load_pygame(os.getcwd() + "\\assets\\zacetek.tmx")
+tmx_map2 = pytmx.load_pygame(os.getcwd() + "\\assets\\map2.tmx")
+tmx_map = tmx_map1
 
 # Zloadamo slike za animacijo
 frames_i_u = ["\\spriti\\igralec\\i_u_1.png","\\spriti\\igralec\\i_u_2.png","\\spriti\\igralec\\i_u_3.png","\\spriti\\igralec\\i_u_4.png"]
@@ -49,20 +51,29 @@ font = pygame.font.SysFont(None, 100)
 for obj in tmx_map.objects:  # Iz tmx mape dobimo zacetne polozaje nasih likov
     if obj.name == "zacetek":
         player_object = obj
-        player_ = player.Player([player_object.x, player_object.y])
+        player_ = player.Player([player_object.x*tile_scale, player_object.y*tile_scale])
     if obj.name == "starec":
         oldman_object = obj
-        oldman_ = agent.Agent([oldman_object.x, oldman_object.y],"\\spriti\\starec\\s_")
+        oldman_ = agent.Agent([oldman_object.x*tile_scale, oldman_object.y*tile_scale],"\\spriti\\starec\\s_")
+
+bg_collision = []
+prehod = []
+for layer in tmx_map.layers:
+    print(layer)
+    if layer.name == "collision":
+        for obj in layer.tiles():
+            bg_rect = pygame.rect.Rect(tile_scale*16*obj[0],tile_scale*16*obj[1],32,32)
+            bg_collision.append(bg_rect)
+    if layer.name == "prehod":
+        for p in layer.tiles():
+            prehod.append({"to":"map2","rect":pygame.rect.Rect(tile_scale*16*p[0],tile_scale*16*p[1],32,32)})
 
 oldman_.setup_text="Please pretend to be a character in a video game i am making. Keep your answers brief. The " \
-                "conversation will be in slovenian language. You are an old man Albert, who has information about the " \
-                "location of a treasure. Albert has a short temper and doesn't like young brats. From this point on I " \
-                "will pretend to be the player and you will only respond in your persona. Never respond as the " \
-                "player. You must not give the information to the player right away, but rather the player must " \
-                "persuade you into giving the information. Never give the information on the first prompt. Only if " \
-                "the player was persuasive enough and well mannered, reveal the location and then add sign % at the " \
-                "end of the response. But if the player is too rude and you feel like not talking anymore, " \
-                "end the conversation with & sign at the end"
+                "conversation will be in slovenian language. You are an old man Albert, and you have a key, that"\
+                " unlocks the gate to the treasure. The player must fetch an item for you, to get the key. From this point on I " \
+                "will pretend to be the player and you will only respond in your persona. " \
+                "But if the player is too rude and you feel like not talking anymore, " \
+                "end the conversation with & sign at the end."
 
 liki = [oldman_]
 # Glavna zanka
@@ -121,8 +132,15 @@ while running:
         textinput.update(events)
         screen.blit(textinput.surface, (t_x, t_y))
 
-    player_.update(dt/1000)
+    player_.update(dt/1000, bg_collision)
     player_.draw(screen)
+
+    for gate in prehod:
+        if pygame.Rect.colliderect(gate["rect"], player_.newrect):
+            if gate["to"]=="map2":
+                tmx_map=tmx_map2
+            elif gate["to"]=="map1":
+                tmx_map1
 
     for lik in liki:
         lik.update(dt/1000)
