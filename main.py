@@ -48,25 +48,47 @@ t_w = 200
 
 font = pygame.font.SysFont(None, 100)
 
-for obj in tmx_map.objects:  # Iz tmx mape dobimo zacetne polozaje nasih likov
-    if obj.name == "zacetek":
-        player_object = obj
-        player_ = player.Player([player_object.x*tile_scale, player_object.y*tile_scale])
-    if obj.name == "starec":
-        oldman_object = obj
-        oldman_ = agent.Agent([oldman_object.x*tile_scale, oldman_object.y*tile_scale],"\\spriti\\starec\\s_")
+player_ = player.Player([0,0])
+oldman_ = None
 
 bg_collision = []
 prehod = []
-for layer in tmx_map.layers:
-    print(layer)
-    if layer.name == "collision":
-        for obj in layer.tiles():
-            bg_rect = pygame.rect.Rect(tile_scale*16*obj[0],tile_scale*16*obj[1],32,32)
-            bg_collision.append(bg_rect)
-    if layer.name == "prehod":
-        for p in layer.tiles():
-            prehod.append({"to":"map2","rect":pygame.rect.Rect(tile_scale*16*p[0],tile_scale*16*p[1],32,32)})
+
+def set_map(tmap):
+    global tmx_map
+    global prehod
+    global bg_collision
+    global player_
+    global oldman_
+    prehod = []
+    bg_collision=[]
+    oldman_=None
+    tmx_map=tmap
+
+    for layer in tmx_map.layers:
+        if layer.name == "collision":
+            for obj in layer.tiles():
+                bg_rect = pygame.rect.Rect(tile_scale * 16 * obj[0], tile_scale * 16 * obj[1], 32, 32)
+                bg_collision.append(bg_rect)
+        if layer.name == "prehodi":
+            print("da")
+            for p in layer.tiles():
+                props = layer.properties
+                print(props)
+                prehod.append({"to": props.get("to"), "rect": pygame.rect.Rect(tile_scale * 16 * p[0], tile_scale * 16 * p[1], 32, 32)})
+    temp = player_.position
+    for obj in tmx_map.objects:  # Iz tmx mape dobimo zacetne polozaje nasih likov
+        if obj.name == "zacetek" and temp[0]==0 and temp[1]==0:
+            player_object = obj
+            player_ = player.Player([player_object.x * tile_scale, player_object.y * tile_scale])
+        if obj.name == "pos_p" and (temp[0]!=0 or temp[1]!=0):
+            player_object = obj
+            player_ = player.Player([player_object.x * tile_scale, player_object.y * tile_scale])
+        if obj.name == "starec":
+            oldman_object = obj
+            oldman_ = agent.Agent([oldman_object.x * tile_scale, oldman_object.y * tile_scale], "\\spriti\\starec\\s_")
+
+set_map(tmx_map1)
 
 oldman_.setup_text="Please pretend to be a character in a video game i am making. Keep your answers brief. The " \
                 "conversation will be in slovenian language. You are an old man Albert, and you have a key, that"\
@@ -78,8 +100,10 @@ oldman_.setup_text="Please pretend to be a character in a video game i am making
 liki = [oldman_]
 # Glavna zanka
 running = True
+mc_counter = 0
 while running:
     dt = clock.tick(60)
+    mc_counter-=1
     events = pygame.event.get()
 
     events2 = []
@@ -136,15 +160,17 @@ while running:
     player_.draw(screen)
 
     for gate in prehod:
-        if pygame.Rect.colliderect(gate["rect"], player_.newrect):
+        if pygame.Rect.colliderect(gate["rect"], player_.newrect) and mc_counter<0:
             if gate["to"]=="map2":
                 tmx_map=tmx_map2
             elif gate["to"]=="map1":
-                tmx_map1
-
+                tmx_map=tmx_map1
+            set_map(tmx_map) # ko prestavimo map, je potrebno pocakati vsaj eno sekundo
+            mc_counter=120
     for lik in liki:
-        lik.update(dt/1000)
-        lik.draw(screen)
+        if lik!=None:
+            lik.update(dt/1000)
+            lik.draw(screen)
 
     # Posodobitev zaslona
     pygame.display.flip()

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="3">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="4">
  <tileset firstgid="1" source="ts1.tsx"/>
  <tileset firstgid="78" source="ts2 - Water.tsx"/>
  <tileset firstgid="82" source="ts3 - Paths.tsx"/>
@@ -24,9 +24,12 @@
    eJzFlsEKACAIQ/1n/x+iW4imGZuBl8y9ZRGpiOhQsEfGjXK/fm09qxentsdB8b39TnHZfb7NVXJdLpqF1nzher1mcK0HJjfKoXxUNRF3C7E206loRW9a10fn7Lx7yODaOib3t37qf7NjAWKFQgo=
   </data>
  </layer>
- <layer id="8" name="prehod" width="30" height="20">
+ <layer id="8" name="prehodi" width="30" height="20" visible="0">
+  <properties>
+   <property name="to" value="map1"/>
+  </properties>
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjIJRMAogoGigHTAKRsEwAQCBRwBz
+   eJxjYBgFo2AUjIJRMAogQHWgHTAKRsEwAQCDXAAm
   </data>
  </layer>
  <layer id="7" name="stvari" width="30" height="20">
@@ -34,4 +37,9 @@
    eJxjYBgFgxVkAnEWlB4Iu0fB0AZlONj0tnsUjAJ6gMYRYic6GCg3DAa/D3YAALuNBQw=
   </data>
  </layer>
+ <objectgroup id="9" name="start">
+  <object id="3" name="pos_p" x="470.469" y="199.722">
+   <point/>
+  </object>
+ </objectgroup>
 </map>

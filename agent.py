@@ -78,7 +78,17 @@ class Agent(pygame.sprite.Sprite):
         self.current_frame=self.animation_frames[self.ix]
 
     def draw_text(self,screen):
-        text_surface = font.render(self.reply, False, (0,0,0))
+        compressed = ""
+        ix = 0
+        for ch in self.reply:
+            ix+=1
+            if ix>=30 and ch==" ":
+                compressed+="\n"
+                ix=0
+            else:
+                compressed+=ch
+
+        text_surface = font.render(compressed, False, (0,0,0))
         text_rect = text_surface.get_rect()
         text_rect = text_rect.move((self.position[0]+self.offset_x-5,self.position[1]+self.offset_y-5))
         text_rect.width+=10
