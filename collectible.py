@@ -30,5 +30,3 @@ class Collectible(pygame.sprite.Sprite):
 
     def update(self,display):
         display.blit(self.image, self.rect)
-        # Implement any updates or animations for the collectible
-        pass
