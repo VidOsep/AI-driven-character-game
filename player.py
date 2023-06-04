@@ -2,6 +2,7 @@ import pygame
 import os
 import math
 import conversation
+import sys
 
 # stanja
 WALK_U = "walk_u"
@@ -96,6 +97,11 @@ class Player(pygame.sprite.Sprite):
         # Interact with another being (target) through talking
         self.in_convo_with.respond_to_talk(text)
 
+        if "&" in self.in_convo_with.reply:
+            sys.exit()
+        if "#" in self.in_convo_with.reply:
+            self.inventory.append("key")
+
     def load_animations(self):
         # Shrani vse slike v en dict
         self.animations = {
@@ -165,7 +171,7 @@ class Player(pygame.sprite.Sprite):
                 self.in_convo_with = lik
 
                 if not self.in_convo_with.active_convo is None:
-                    if self.inventory != []:
+                    if len(self.inventory) > 0:
                         self.in_convo_with.active_convo.setup(
                             "~The player has returned with the following things in his inventory: " + ", ".join(
                                 self.inventory) + ".")
