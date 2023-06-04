@@ -51,9 +51,6 @@ class Agent(pygame.sprite.Sprite):
 
     def respond_to_talk(self, text):
         # Odziv lika na govor igralca
-        if self.active_convo is None:
-            self.active_convo=conversation.Conversation()
-            self.active_convo.setup(self.setup_text)
         self.reply=self.active_convo.new_prompt(text)
 
     def load_animation(self):

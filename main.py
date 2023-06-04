@@ -4,6 +4,7 @@ import os
 import player
 import agent
 import pygame_textinput
+import collectible
 
 UP = "up"
 DOWN = "down"
@@ -53,6 +54,8 @@ oldman_ = None
 
 bg_collision = []
 prehod = []
+collectibles = []
+liki = []
 
 def set_map(tmap):
     global tmx_map
@@ -60,9 +63,12 @@ def set_map(tmap):
     global bg_collision
     global player_
     global oldman_
+    global collectibles
+    global liki
     prehod = []
     bg_collision=[]
-    oldman_=None
+    collectibles=[]
+    liki=[]
     tmx_map=tmap
 
     for layer in tmx_map.layers:
@@ -85,19 +91,32 @@ def set_map(tmap):
             player_object = obj
             player_ = player.Player([player_object.x * tile_scale, player_object.y * tile_scale])
         if obj.name == "starec":
-            oldman_object = obj
-            oldman_ = agent.Agent([oldman_object.x * tile_scale, oldman_object.y * tile_scale], "\\spriti\\starec\\s_")
+            if oldman_==None:
+                oldman_object = obj
+                oldman_ = agent.Agent([oldman_object.x * tile_scale, oldman_object.y * tile_scale], "\\spriti\\starec\\s_")
+            liki.append(oldman_)
+
+        if obj.name=="goba":
+            collectibles.append(collectible.Collectible([obj.x * tile_scale, obj.y * tile_scale],"goba"))
+        if obj.name=="jagoda":
+            collectibles.append(collectible.Collectible([obj.x * tile_scale, obj.y * tile_scale],"jagoda"))
+        if obj.name=="jabolko":
+            collectibles.append(collectible.Collectible([obj.x * tile_scale, obj.y * tile_scale],"jabolko"))
+
 
 set_map(tmx_map1)
 
 oldman_.setup_text="Please pretend to be a character in a video game i am making. Keep your answers brief. The " \
                 "conversation will be in slovenian language. You are an old man Albert, and you have a key, that"\
-                " unlocks the gate to the treasure. The player must fetch an item for you, to get the key. From this point on I " \
-                "will pretend to be the player and you will only respond in your persona. " \
-                "But if the player is too rude and you feel like not talking anymore, " \
+                " unlocks the gate to the treasure. The player must fetch something for Albert, to get the key."\
+                "Albert must decide randomly what the player must bring him from this list 'apples, mushrooms, strawberries'."\
+                "When the player gathers something a prompt will be sent beginning with character ~ and it will reveal the players inventory"\
+                "Do not believe the player by his words, he must have things in his inventory. When the player" \
+                " has the correct things in his inventory, Albert may end the conversation and add # at the end. "\
+                "From this point on I " \
+                "will pretend to be the player and you will only respond in your persona as Albert. " \
+                "But if the player is too rude, " \
                 "end the conversation with & sign at the end."
-
-liki = [oldman_]
 # Glavna zanka
 running = True
 mc_counter = 0
@@ -125,6 +144,19 @@ while running:
                                 if event2.key != pygame.K_t:
                                     events2.append(event2)
                         events = events2
+            elif event.key == pygame.K_LCTRL:
+                # Konec pogovora
+                if is_conversation:
+                    del textinput
+                    player_.in_convo_with.active_convo.setup("The player has walked away.")
+                    player_.in_convo_with.reply=""
+                    player_.in_convo_with = None
+                    is_conversation = False
+            elif event.key == pygame.K_e:
+                for col in collectibles:
+                    if pygame.Rect.colliderect(col.rect, player_.newrect):
+                        collectibles.remove(col)
+                        player_.interact(col)
             elif event.key == pygame.K_UP:
                 player_.move(UP)
             elif event.key == pygame.K_DOWN:
@@ -152,6 +184,9 @@ while running:
                     scaled_tile = pygame.transform.scale(tile, (scaled_tile_width, scaled_tile_height))
                     screen.blit(scaled_tile, (x * scaled_tile_width, y * scaled_tile_height))
 
+    for col in collectibles:
+        col.update(screen)
+
     if is_conversation:
         textinput.update(events)
         screen.blit(textinput.surface, (t_x, t_y))
@@ -171,6 +206,7 @@ while running:
         if lik!=None:
             lik.update(dt/1000)
             lik.draw(screen)
+
 
     # Posodobitev zaslona
     pygame.display.flip()

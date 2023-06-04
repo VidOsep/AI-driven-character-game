@@ -1,6 +1,7 @@
 import pygame
 import os
 import math
+import conversation
 
 # stanja
 WALK_U = "walk_u"
@@ -18,17 +19,21 @@ DOWN = "down"
 RIGHT = "right"
 LEFT = "left"
 
-frames_i_u = ["\\spriti\\igralec\\i_u_1.png","\\spriti\\igralec\\i_u_2.png","\\spriti\\igralec\\i_u_3.png","\\spriti\\igralec\\i_u_4.png"]
-frames_i_r = ["\\spriti\\igralec\\i_r_1.png","\\spriti\\igralec\\i_r_2.png","\\spriti\\igralec\\i_r_3.png","\\spriti\\igralec\\i_r_4.png"]
-frames_i_d = ["\\spriti\\igralec\\i_d_1.png","\\spriti\\igralec\\i_d_2.png","\\spriti\\igralec\\i_d_3.png","\\spriti\\igralec\\i_d_4.png"]
-frames_i_l = ["\\spriti\\igralec\\i_l_1.png","\\spriti\\igralec\\i_l_2.png","\\spriti\\igralec\\i_l_3.png","\\spriti\\igralec\\i_l_4.png"]
+frames_i_u = ["\\spriti\\igralec\\i_u_1.png", "\\spriti\\igralec\\i_u_2.png", "\\spriti\\igralec\\i_u_3.png",
+              "\\spriti\\igralec\\i_u_4.png"]
+frames_i_r = ["\\spriti\\igralec\\i_r_1.png", "\\spriti\\igralec\\i_r_2.png", "\\spriti\\igralec\\i_r_3.png",
+              "\\spriti\\igralec\\i_r_4.png"]
+frames_i_d = ["\\spriti\\igralec\\i_d_1.png", "\\spriti\\igralec\\i_d_2.png", "\\spriti\\igralec\\i_d_3.png",
+              "\\spriti\\igralec\\i_d_4.png"]
+frames_i_l = ["\\spriti\\igralec\\i_l_1.png", "\\spriti\\igralec\\i_l_2.png", "\\spriti\\igralec\\i_l_3.png",
+              "\\spriti\\igralec\\i_l_4.png"]
 
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, position):
         super().__init__()
         self.position = position
-        self.velocity = [0,0]
+        self.velocity = [0, 0]
         self.v_max = 50
         self.newrect = None
 
@@ -42,41 +47,42 @@ class Player(pygame.sprite.Sprite):
         self.current_frame = self.load_animation(IDLE_R)[0]
         self.animation_speed = 4
         self.t_ = 0
-        self.ix=0
+        self.ix = 0
 
-    def update(self,dt,bg_collision):
+        self.inventory = []
+
+    def update(self, dt, bg_collision):
         # Update player's position based on velocity
         collides = False
         newpos = [self.position[0] + self.velocity[0] * dt, self.position[1] + self.velocity[1] * dt]
         self.newrect = pygame.rect.Rect(newpos, (32, 32))
         for tile in bg_collision:
-            if pygame.Rect.colliderect(tile,self.newrect):
+            if pygame.Rect.colliderect(tile, self.newrect):
                 collides = True
         if not collides:
-            self.position=newpos
+            self.position = newpos
 
-
-        if self.t_/60>1/4:
+        if self.t_ / 60 > 1 / 4:
             self.next_animation()
-            self.t_=0
-        self.t_+=1
+            self.t_ = 0
+        self.t_ += 1
 
-    def move(self,dir):
-        if dir=="right":
-            self.velocity=(self.v_max,0)
+    def move(self, dir):
+        if dir == "right":
+            self.velocity = (self.v_max, 0)
             self.set_state(WALK_R)
-        if dir=="left":
-            self.velocity=(-self.v_max,0)
+        if dir == "left":
+            self.velocity = (-self.v_max, 0)
             self.set_state(WALK_L)
-        if dir=="up":
-            self.velocity=(0,-self.v_max)
+        if dir == "up":
+            self.velocity = (0, -self.v_max)
             self.set_state(WALK_U)
-        if dir=="down":
-            self.velocity=(0,self.v_max)
+        if dir == "down":
+            self.velocity = (0, self.v_max)
             self.set_state(WALK_D)
 
     def stop(self):
-        self.velocity = [0,0]
+        self.velocity = [0, 0]
         if self.state == WALK_U:
             self.set_state(IDLE_U)
         elif self.state == WALK_D:
@@ -86,7 +92,7 @@ class Player(pygame.sprite.Sprite):
         elif self.state == WALK_L:
             self.set_state(IDLE_L)
 
-    def talk(self,text):
+    def talk(self, text):
         # Interact with another being (target) through talking
         self.in_convo_with.respond_to_talk(text)
 
@@ -106,33 +112,33 @@ class Player(pygame.sprite.Sprite):
     def load_animation(self, state):
         # Vrni list z slikami
         animation_frames = []
-        if state==WALK_U:
+        if state == WALK_U:
             for addr in frames_i_u:
-                animation_frames.append(pygame.image.load(os.getcwd()+addr))
-        if state==WALK_D:
+                animation_frames.append(pygame.image.load(os.getcwd() + addr))
+        if state == WALK_D:
             for addr in frames_i_d:
-                animation_frames.append(pygame.image.load(os.getcwd()+addr))
-        if state==WALK_R:
+                animation_frames.append(pygame.image.load(os.getcwd() + addr))
+        if state == WALK_R:
             for addr in frames_i_r:
-                animation_frames.append(pygame.image.load(os.getcwd()+addr))
-        if state==WALK_L:
+                animation_frames.append(pygame.image.load(os.getcwd() + addr))
+        if state == WALK_L:
             for addr in frames_i_l:
-                animation_frames.append(pygame.image.load(os.getcwd()+addr))
-        if state==IDLE_U:
-            animation_frames=[pygame.image.load(os.getcwd()+frames_i_u[0])]
-        if state==IDLE_D:
-            animation_frames=[pygame.image.load(os.getcwd()+frames_i_d[0])]
-        if state==IDLE_R:
-            animation_frames=[pygame.image.load(os.getcwd()+frames_i_r[0])]
-        if state==IDLE_L:
-            animation_frames=[pygame.image.load(os.getcwd()+frames_i_l[0])]
+                animation_frames.append(pygame.image.load(os.getcwd() + addr))
+        if state == IDLE_U:
+            animation_frames = [pygame.image.load(os.getcwd() + frames_i_u[0])]
+        if state == IDLE_D:
+            animation_frames = [pygame.image.load(os.getcwd() + frames_i_d[0])]
+        if state == IDLE_R:
+            animation_frames = [pygame.image.load(os.getcwd() + frames_i_r[0])]
+        if state == IDLE_L:
+            animation_frames = [pygame.image.load(os.getcwd() + frames_i_l[0])]
         # Load frames using Pygame or your preferred animation library
         # Append each frame to the animation_frames list
 
         for i in range(len(animation_frames)):
-            x_size=animation_frames[i].get_width()
-            y_size=animation_frames[i].get_height()
-            img = pygame.transform.scale(animation_frames[i],(x_size*2,y_size*2))
+            x_size = animation_frames[i].get_width()
+            y_size = animation_frames[i].get_height()
+            img = pygame.transform.scale(animation_frames[i], (x_size * 2, y_size * 2))
             animation_frames[i] = img
         return animation_frames
 
@@ -143,17 +149,34 @@ class Player(pygame.sprite.Sprite):
             self.current_frame = self.current_animation[0]
 
     def next_animation(self):
-        self.ix+=1
-        if self.ix+1>len(self.current_animation):
-            self.ix=0
-        self.current_frame=self.current_animation[self.ix]
+        self.ix += 1
+        if self.ix + 1 > len(self.current_animation):
+            self.ix = 0
+        self.current_frame = self.current_animation[self.ix]
 
-    def draw(self,screen):
-        screen.blit(self.current_frame,self.position)
+    def draw(self, screen):
+        screen.blit(self.current_frame, self.position)
 
     def start_convo(self, liki):
         # Preveri ce je v zadostni blizini drugih likov
         for lik in liki:
-            if math.sqrt((self.position[0]-lik.position[0])**2+(self.position[1]-lik.position[1])**2) < self.min_rad:
+            if math.sqrt((self.position[0] - lik.position[0]) ** 2 + (
+                    self.position[1] - lik.position[1]) ** 2) < self.min_rad:
                 self.in_convo_with = lik
+
+                if not self.in_convo_with.active_convo is None:
+                    if self.inventory != []:
+                        self.in_convo_with.active_convo.setup(
+                            "~The player has returned with the following things in his inventory: " + ", ".join(
+                                self.inventory) + ".")
+                    else:
+                        self.in_convo_with.active_convo.setup("~The player has returned with nothing in his inventory.")
+
+                if self.in_convo_with.active_convo is None:
+                    self.in_convo_with.active_convo = conversation.Conversation()
+                    self.in_convo_with.active_convo.setup(self.in_convo_with.setup_text)
                 return True
+
+    def interact(self, col):
+        self.inventory.append(col.type)
+        print(self.inventory)
