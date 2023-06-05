@@ -2,7 +2,6 @@ import pygame
 import os
 import math
 import conversation
-import sys
 
 # stanja
 WALK_U = "walk_u"
@@ -41,10 +40,10 @@ class Player(pygame.sprite.Sprite):
         self.in_convo_with = None
         self.min_rad = 30
 
-        self.state = IDLE_R  # Initial state is idle
+        self.state = IDLE_R
         self.orientation = RIGHT
-        self.load_animations()  # Load animations for different states
-        self.current_animation = self.animations[self.state]  # Current animation based on state
+        self.load_animations()
+        self.current_animation = self.animations[self.state]
         self.current_frame = self.load_animation(IDLE_R)[0]
         self.animation_speed = 4
         self.t_ = 0
@@ -53,7 +52,6 @@ class Player(pygame.sprite.Sprite):
         self.inventory = []
 
     def update(self, dt, bg_collision):
-        # Update player's position based on velocity
         collides = False
         newpos = [self.position[0] + self.velocity[0] * dt, self.position[1] + self.velocity[1] * dt]
         self.newrect = pygame.rect.Rect(newpos, (32, 32))
@@ -94,11 +92,8 @@ class Player(pygame.sprite.Sprite):
             self.set_state(IDLE_L)
 
     def talk(self, text):
-        # Interact with another being (target) through talking
         self.in_convo_with.respond_to_talk(text)
 
-        if "&" in self.in_convo_with.reply:
-            sys.exit()
         if "#" in self.in_convo_with.reply:
             self.inventory.append("key")
 

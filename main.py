@@ -2,6 +2,7 @@ import pygame
 import pytmx
 import os
 import sys
+import time
 import player
 import agent
 import pygame_textinput
@@ -109,6 +110,34 @@ def set_map(tmap):
         if obj.name == "jabolko":
             collectibles.append(collectible.Collectible([obj.x * tile_scale, obj.y * tile_scale], "jabolko"))
 
+def game_over(screen):
+    text_surface = font.render("KONEC IGRE\nposkusi še enkrat", False, (0,0,0))
+    text_rect = text_surface.get_rect()
+    text_rect = pygame.Rect.move(text_rect,((scaled_map_width/2)-(text_rect.width/2),(scaled_map_height/2)-(text_rect.height/2)-150))
+    text_rect.width += 10
+    text_rect.height += 10
+    pygame.draw.rect(screen, (255, 255, 255), text_rect)
+    screen.blit(text_surface, text_rect)
+
+    pygame.display.flip()
+
+    time.sleep(5)
+    sys.exit()
+
+def game_won(screen):
+    text_surface = font.render("Čestitke,\nzmagal si!", False, (0, 0, 0))
+    text_rect = text_surface.get_rect()
+    text_rect = pygame.Rect.move(text_rect, (
+    (scaled_map_width / 2) - (text_rect.width / 2), (scaled_map_height / 2) - (text_rect.height / 2) - 150))
+    text_rect.width += 10
+    text_rect.height += 10
+    pygame.draw.rect(screen, (255, 255, 255), text_rect)
+    screen.blit(text_surface, text_rect)
+
+    pygame.display.flip()
+
+    time.sleep(5)
+    sys.exit()
 
 set_map(tmx_map1) # Zacetna mapa
 
@@ -210,7 +239,7 @@ while running:
 
     for eg in end_gate: # Ce dosezemo ciljno ograjo in imamo kljuc, je konec
         if pygame.Rect.colliderect(eg, player_.newrect) and "key" in player_.inventory:
-            print("Zmagal si!")
+            game_won(screen)
             sys.exit()
 
     for gate in prehod: # Prehodi med mapami
@@ -226,6 +255,10 @@ while running:
         if lik != None:
             lik.update(dt / 1000)
             lik.draw(screen)
+
+    if player_.in_convo_with:
+        if "&" in player_.in_convo_with.reply:
+            game_over(screen)
 
     # Posodobitev zaslona
     pygame.display.flip()
