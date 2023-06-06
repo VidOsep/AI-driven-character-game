@@ -164,18 +164,16 @@ class Player(pygame.sprite.Sprite):
             if math.sqrt((self.position[0] - lik.position[0]) ** 2 + (
                     self.position[1] - lik.position[1]) ** 2) < self.min_rad:
                 self.in_convo_with = lik
-
-                if not self.in_convo_with.active_convo is None:
+                if self.in_convo_with.active_convo is None:
+                    self.in_convo_with.active_convo = conversation.Conversation()
+                    self.in_convo_with.active_convo.setup(self.in_convo_with.setup_text)
+                else:
                     if len(self.inventory) > 0:
                         self.in_convo_with.active_convo.setup(
                             "~The player has returned with the following things in his inventory: " + ", ".join(
                                 self.inventory) + ".")
                     else:
                         self.in_convo_with.active_convo.setup("~The player has returned with nothing in his inventory.")
-
-                if self.in_convo_with.active_convo is None:
-                    self.in_convo_with.active_convo = conversation.Conversation()
-                    self.in_convo_with.active_convo.setup(self.in_convo_with.setup_text)
                 return True
 
     def interact(self, col):
