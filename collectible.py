@@ -4,6 +4,7 @@ import os
 scaled_tile_width = 32
 scaled_tile_height = 32
 
+# zloadamo in povecamo slike
 jabolko_img = pygame.image.load(os.getcwd() + "\\assets\\jabolko.png")
 jabolko_img = pygame.transform.scale(jabolko_img, (scaled_tile_width, scaled_tile_height))
 
@@ -13,11 +14,16 @@ jagoda_img = pygame.transform.scale(jagoda_img, (scaled_tile_width, scaled_tile_
 goba_img = pygame.image.load(os.getcwd() + "\\assets\\goba.png")
 goba_img = pygame.transform.scale(goba_img, (scaled_tile_width, scaled_tile_height))
 
+
 class Collectible(pygame.sprite.Sprite):
+    """
+    Collectible je statičen objekt, ki ga igralec lahko pobere in pospravi v svojo lastnino
+    """
+
     def __init__(self, position, type):
         super().__init__()
 
-        if type == "goba":
+        if type == "goba":  # mozni so trije tipi
             self.image = goba_img
         elif type == "jagoda":
             self.image = jagoda_img
@@ -28,5 +34,5 @@ class Collectible(pygame.sprite.Sprite):
         self.rect.topleft = position
         self.type = type
 
-    def update(self,display):
+    def update(self, display):
         display.blit(self.image, self.rect)
