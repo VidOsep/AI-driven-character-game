@@ -74,25 +74,27 @@ class Agent(pygame.sprite.Sprite):
             self.ix=0
         self.current_frame=self.animation_frames[self.ix]
 
-    def draw_text(self,screen):
-        compressed = ""
-        ix = 0
-        for ch in self.reply:
-            ix+=1
-            if ix>=30 and ch==" ":
-                compressed+="\n"
-                ix=0
-            else:
-                compressed+=ch
-
-        text_surface = font.render(compressed, False, (0,0,0))
+    def draw_line(self,line,x,y,screen):
+        text_surface = font.render(line, False, (0,0,0))
         text_rect = text_surface.get_rect()
-        text_rect = text_rect.move((self.position[0]+self.offset_x-5,self.position[1]+self.offset_y-5))
-        text_rect.width+=10
-        text_rect.height+=10
+        text_rect = text_rect.move((x-5,y-5))
+        text_rect.width +=10
+        text_rect.height +=10
         pygame.draw.rect(screen,(255,255,255),text_rect)
-        pygame.draw.rect(screen,(0,0,0),text_rect, 3)
-        screen.blit(text_surface, (self.position[0]+self.offset_x,self.position[1]+self.offset_y))
+        screen.blit(text_surface, (x,y))
+
+    def draw_text(self,screen):
+        ix = 0
+        row=0
+        for i in range(len(self.reply)):
+            if (ix >= 30 and self.reply[i] == " "):
+                self.draw_line(self.reply[i-ix:i],self.position[0]+self.offset_x,self.position[1]+self.offset_y+25*row,screen)
+                row+=1
+                ix=-1
+            elif i == len(self.reply) - 1:
+                self.draw_line(self.reply[i-ix:i],self.position[0]+self.offset_x,self.position[1]+self.offset_y+25*row,screen)
+            ix += 1
+
     def draw(self,screen):
         screen.blit(self.current_frame,self.position)
         if self.reply!="":
