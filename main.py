@@ -25,6 +25,9 @@ tmx_map1 = pytmx.load_pygame(os.getcwd() + "\\assets\\zacetek.tmx")
 tmx_map2 = pytmx.load_pygame(os.getcwd() + "\\assets\\map2.tmx")
 tmx_map = tmx_map1  # Aktivna mapa
 
+# zacetni zaslon
+start_screen = pygame.image.load(os.getcwd() + "\\assets\\zacetni_zaslon.png")
+
 # racun dimenzij posameznega tila
 scaled_tile_width = tmx_map.tilewidth * tile_scale
 scaled_tile_height = tmx_map.tileheight * tile_scale
@@ -52,7 +55,8 @@ bg_collision = []
 prehod = []
 collectibles = []
 liki = []
-end_gate = []
+end_gate_layer = tmx_map1.get_layer_by_name("end_gate")
+end_gate_layer.visible = True
 
 
 def set_map(tmap):
@@ -113,10 +117,10 @@ def set_map(tmap):
 
 def game_over(screen):
     # neuspesen konec igre
-    text_surface = font.render("KONEC IGRE\nposkusi še enkrat", False, (0, 0, 0))
+    text_surface = font.render("IZGUBIL SI\nlepše se obnašaj naslednjič", False, (0, 0, 0))
     text_rect = text_surface.get_rect()
     text_rect = pygame.Rect.move(text_rect, (
-    (scaled_map_width / 2) - (text_rect.width / 2), (scaled_map_height / 2) - (text_rect.height / 2) - 150))
+        (scaled_map_width / 2) - (text_rect.width / 2), (scaled_map_height / 2) - (text_rect.height / 2) - 150))
     text_rect.width += 10
     text_rect.height += 10
     pygame.draw.rect(screen, (255, 255, 255), text_rect)
@@ -145,6 +149,14 @@ def game_won(screen):
     sys.exit()
 
 
+def begin_game():
+    global screen
+
+    s_rect = start_screen.get_rect()
+    s_rect.center = (scaled_map_width / 2, scaled_map_height / 2)
+    screen.blit(start_screen, s_rect)
+
+
 set_map(tmx_map1)  # zacetna mapa
 
 # zacetna avodila za AI lik
@@ -153,10 +165,11 @@ oldman_.setup_text = "Please pretend to be a character in a video game i am maki
                      "unlocks the gate to the treasure. The player must fetch something for Albert, to get the key." \
                      "Albert must give the player a task, if the player wants to get the key. Choose randomly " \
                      "whether Albert needs apples, mushrooms or strawberries." \
-                     "If the player asks, where he should gather these things, tell him to go west and follow the path."\
+                     "If the player asks, where he should gather these things, tell him to go west and follow the path." \
                      "When the player gathers something and returns with the stuff, a prompt beginning with ~ will reveal what the player gathered." \
                      "Do not believe the player by his words, he must have things in his inventory. When the player" \
                      " has the correct things in his inventory, Albert may end the conversation and add # at the end. " \
+                     "When you give the key to the player, tell him to go north and follow the path to reach his goal." \
                      "From this point on I " \
                      "will pretend to be the player and you will only respond in your persona as Albert. " \
                      "But if the player is too rude, " \
@@ -164,7 +177,9 @@ oldman_.setup_text = "Please pretend to be a character in a video game i am maki
 
 # glavna zanka
 running = True
+instructions = True
 mc_counter = 0  # stevec za prehode med mapami
+begin_game()
 while running:
     dt = clock.tick(60)
     mc_counter -= 1
@@ -215,6 +230,8 @@ while running:
             elif event.key == pygame.K_RETURN and is_conversation:  # Poslji tekst naprej
                 is_typing = False
                 player_.talk(textinput.value)
+            elif event.key == pygame.K_ESCAPE:
+                instructions = False
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_UP or event.key == pygame.K_DOWN or event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
                 player_.stop()
@@ -244,6 +261,7 @@ while running:
         total_col = bg_collision + end_gate
     else:
         total_col = bg_collision
+        end_gate_layer.visible = False
 
     # posodobimo igralca
     player_.update(dt / 1000, total_col)
@@ -267,6 +285,9 @@ while running:
         if lik != None:
             lik.update(dt / 1000)
             lik.draw(screen)
+
+    if instructions:
+        begin_game()
 
     # posodobitev zaslona
     pygame.display.flip()
