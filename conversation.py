@@ -12,7 +12,6 @@ class Conversation:
 
     def setup(self, sys_prompt):
         # sistemsko navodilo agentu
-        print(sys_prompt)
         self.messages.append({"role": "system", "content": sys_prompt})
 
     def new_prompt(self, text):

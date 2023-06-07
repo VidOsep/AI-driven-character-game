@@ -83,10 +83,8 @@ def set_map(tmap):
                 bg_rect = pygame.rect.Rect(tile_scale * 16 * obj[0], tile_scale * 16 * obj[1], 32, 32)
                 bg_collision.append(bg_rect)
         if layer.name == "prehodi":
-            print("da")
             for p in layer.tiles():
                 props = layer.properties
-                print(props)
                 prehod.append({"to": props.get("to"),
                                "rect": pygame.rect.Rect(tile_scale * 16 * p[0], tile_scale * 16 * p[1], 32, 32)})
         if layer.name == "end_gate":

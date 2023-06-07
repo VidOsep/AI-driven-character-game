@@ -188,4 +188,3 @@ class Player(pygame.sprite.Sprite):
     def interact(self, col):
         # igralec pobere stvar, ki je istanca classa Collectible
         self.inventory.append(col.type)
-        print(self.inventory)
