@@ -142,7 +142,7 @@ def game_won(screen):
 set_map(tmx_map1) # Zacetna mapa
 
 # Zacetna avodila za AI lik
-oldman_.setup_text = "Please pretend to be a character in a video game i am making. Keep your answers brief, at most 70 words. The " \
+oldman_.setup_text = "Please pretend to be a character in a video game i am making. Keep your answers brief, at most 15 words. The " \
                      "conversation will be in slovenian language. You are an old man Albert, and you have a key, that" \
                      "unlocks the gate to the treasure. The player must fetch something for Albert, to get the key." \
                      "Albert must give the player a task, if the player wants to get the key. Choose randomly " \
