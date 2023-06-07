@@ -4,7 +4,7 @@
  <tileset firstgid="78" source="ts2 - Water.tsx"/>
  <tileset firstgid="82" source="ts3 - Paths.tsx"/>
  <tileset firstgid="98" source="ts4 - Osnovno rastlinje.tsx"/>
- <tileset firstgid="143" source="../../../Documents/LovZaZaklad/ts5- Fence.tsx"/>
+ <tileset firstgid="143" source="ts5- Fence.tsx"/>
  <layer id="1" name="ozadje" width="30" height="20">
   <data encoding="base64" compression="zlib">
    eJy1lE0OgyAQhcF22ZjUTWvS9hx6AOPS+9+mkELy8jojP+LihQjCN2+YwRpjOtIkzKF6py3IhjkL6zax/+J0CxzWosxPxI378RztTNyf+qeEG32+G3BX+r47jcS1gZXrgbnMkHKPXiNXynUud+8+NS779OMchPl5kkYlxtqaeigMzW8qvxrXcwYYS84oqedVuF9kR4+pGGr66GV+fc9s5En5Hg5yNbbER2EsWl1xjUl1prE38++X4+grvDK72+FrceT4bcnn9+YodyF+TgwtuKU5uJ7IZT7qs8ONuSt5y3JV278tuNLbcrZ8H30BOdFrfw==
