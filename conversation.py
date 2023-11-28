@@ -1,8 +1,9 @@
-import openai
+from openai import OpenAI
 
-f = open("key.txt", "r")
-openai.api_key = f.read()  # preberemo API kljuc
+#f = open("key.txt", "r")
+#openai.api_key = f.read()  # preberemo API kljuc
 
+client = OpenAI(api_key="")
 
 class Conversation:
     def __init__(self):
@@ -20,8 +21,8 @@ class Conversation:
             return ""
 
         self.messages.append({"role": "user", "content": text})
-        chat = openai.ChatCompletion.create(
-            model="gpt-4-0314", messages=self.messages
+        chat = client.chat.completions.create(
+            model="gpt-3.5-turbo-1106", messages=self.messages
         )
         reply = chat.choices[0].message.content
         self.messages.append({"role": "assistant", "content": reply})
