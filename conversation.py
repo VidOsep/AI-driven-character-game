@@ -3,7 +3,7 @@ from openai import OpenAI
 #f = open("key.txt", "r")
 #openai.api_key = f.read()
 
-client = OpenAI(api_key="") # here you have to insert the openai API key
+client = OpenAI(api_key="INSERT-KEY-HERE") # here you have to insert the openai API key
 
 class Conversation:
     def __init__(self):
@@ -22,7 +22,7 @@ class Conversation:
 
         self.messages.append({"role": "user", "content": text}) # generate a response from openai api
         chat = client.chat.completions.create(
-            model="gpt-3.5-turbo-1106", messages=self.messages
+            model="gpt-4o", messages=self.messages
         )
         reply = chat.choices[0].message.content
         self.messages.append({"role": "assistant", "content": reply}) # save it to history

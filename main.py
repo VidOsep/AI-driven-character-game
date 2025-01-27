@@ -44,13 +44,13 @@ is_typing = False
 t_x = 40
 t_y = scaled_map_height - 80
 t_w = 200
-font = pygame.font.SysFont(None, 100)
+font = pygame.font.SysFont(None, 60)
 
 player_ = player.Player([0, 0]) # player instance
 oldman_ = None 
 
 bg_collision = []
-gate = []
+gates = []
 collectibles = []
 characters = []
 end_gate_layer = tmx_map1.get_layer_by_name("end_gate")
@@ -60,14 +60,14 @@ end_gate_layer.visible = True
 def set_map(tmap):
     # setup the whole map at the beginning
     global tmx_map
-    global gate
+    global gates
     global bg_collision
     global player_
     global oldman_
     global collectibles
     global characters
     global end_gate
-    gate = []
+    gates = []
     bg_collision = []
     collectibles = []
     end_gate = []
@@ -80,10 +80,10 @@ def set_map(tmap):
             for obj in layer.tiles():
                 bg_rect = pygame.rect.Rect(tile_scale * 16 * obj[0], tile_scale * 16 * obj[1], 32, 32)
                 bg_collision.append(bg_rect)
-        if layer.name == "prehodi":
+        if layer.name == "gates":
             for p in layer.tiles():
                 props = layer.properties
-                gate.append({"to": props.get("to"),
+                gates.append({"to": props.get("to"),
                                "rect": pygame.rect.Rect(tile_scale * 16 * p[0], tile_scale * 16 * p[1], 32, 32)})
         if layer.name == "end_gate":
             for p in layer.tiles():
@@ -101,7 +101,7 @@ def set_map(tmap):
             if oldman_ == None:
                 oldman_object = obj
                 oldman_ = agent.Agent([oldman_object.x * tile_scale, oldman_object.y * tile_scale],
-                                      "\\pomozne-datoteke\\liki\\starec\\s_")
+                                      "\\assets\\character-sprites\\old-man\\s_")
             characters.append(oldman_)
         if obj.name == "mushroom":
             collectibles.append(collectible.Collectible([obj.x * tile_scale, obj.y * tile_scale], "mushroom"))
@@ -113,7 +113,7 @@ def set_map(tmap):
 
 def game_over(screen):
     # unsuccessful ending
-    text_surface = font.render("YOU LOST\nBetter luck next time.", False, (0, 0, 0))
+    text_surface = font.render("Albert did not like your attitude...\nBetter luck next time.", False, (0, 0, 0))
     text_rect = text_surface.get_rect()
     text_rect = pygame.Rect.move(text_rect, (
         (scaled_map_width / 2) - (text_rect.width / 2), (scaled_map_height / 2) - (text_rect.height / 2) - 150))
@@ -159,8 +159,8 @@ set_map(tmx_map1)  # starting map
  Here follows the intial system prompt for the api.
  This text determines the characters (old man) behaviour and assigns it its tasks.
 """
-oldman_.setup_text = "Please pretend to be a character in a video game i am making. Keep your answers brief, at most 15 words. The " \
-                     "conversation will be in slovenian language. You are an old man Albert, and you have a key, that" \
+oldman_.setup_text = "Please pretend to be a character in a video game i am making. Keep your answers brief, at most 15 words." \
+                     "You are an old man Albert, and you have a key, that" \
                      "unlocks the gate to the treasure. The player must fetch something for Albert, to get the key." \
                      "Albert must give the player a task, if the player wants to get the key. Choose randomly " \
                      "whether Albert needs apples, mushrooms or strawberries." \
@@ -193,11 +193,11 @@ while running:
             if event.key == pygame.K_t:
                 if not is_conversation:
                     is_conversation = player_.start_convo(characters)
-                    # zacetek besedne interakcije: pogovora
+                    # start of conversation
                     if is_conversation:
                         textinput = pygame_textinput.TextInputVisualizer()
                         is_typing = True
-                        for event2 in events:  # izloci event pritiska tipke t iz lista eventov, saj ne zelimo tega v tekstu
+                        for event2 in events:  # delete event t key pressed, we don't want it present in the text
                             if event2.type != pygame.KEYDOWN:
                                 events2.append(event2)
                             if event2.type == pygame.KEYDOWN:
@@ -205,16 +205,16 @@ while running:
                                     events2.append(event2)
                         events = events2
             elif event.key == pygame.K_LCTRL:
-                # konec pogovora
+                # end conversation
                 if is_conversation:
                     del textinput
                     player_.in_convo_with.active_convo.setup(
-                        "The player has walked away.")  # Liku, s katerim se pogovarjamo, sporocimo odhod
+                        "The player has walked away.")  # character is notified of the player leaving
                     player_.in_convo_with.reply = ""
                     player_.in_convo_with = None
                     is_conversation = False
             elif event.key == pygame.K_e:
-                for col in collectibles:  # interakcija z stvarjo, ki se jo da pobrati
+                for col in collectibles:  # interaction with collectible
                     if pygame.Rect.colliderect(col.rect, player_.newrect):
                         collectibles.remove(col)
                         player_.interact(col)
@@ -226,7 +226,7 @@ while running:
                 player_.move(RIGHT)
             elif event.key == pygame.K_LEFT:
                 player_.move(LEFT)
-            elif event.key == pygame.K_RETURN and is_conversation:  # Poslji tekst naprej
+            elif event.key == pygame.K_RETURN and is_conversation:  # send text
                 is_typing = False
                 player_.talk(textinput.value)
             elif event.key == pygame.K_ESCAPE:
@@ -236,8 +236,8 @@ while running:
                 player_.stop()
 
     screen.fill((0, 0, 0))
-    # izris tilov
-    for layer in tmx_map.visible_layers:  # izrisemo pasivni del sveta
+    # display tiles
+    for layer in tmx_map.visible_layers:  # display passive elements
         if isinstance(layer, pytmx.TiledTileLayer):
             for x, y, gid in layer:
                 tile = tmx_map.get_tile_image_by_gid(gid)
@@ -245,10 +245,10 @@ while running:
                     scaled_tile = pygame.transform.scale(tile, (scaled_tile_width, scaled_tile_height))
                     screen.blit(scaled_tile, (x * scaled_tile_width, y * scaled_tile_height))
 
-    for col in collectibles:  # izrisemo poberljive stvari
+    for col in collectibles:  # display collectibles
         col.update(screen)
 
-    if is_conversation:  # posodobimo pogovor
+    if is_conversation:  # update conversation
         textinput.update(events)
         screen.blit(textinput.surface, (t_x, t_y))
 
@@ -256,31 +256,31 @@ while running:
         if "&" in player_.in_convo_with.reply:
             game_over(screen)
 
-    if "key" not in player_.inventory:  # preverimo ce ima igralec dostop cez vrata
+    if "key" not in player_.inventory:  # check if player got the key and can go through the gate
         total_col = bg_collision + end_gate
     else:
         total_col = bg_collision
         end_gate_layer.visible = False
 
-    # posodobimo igralca
+    # update player
     player_.update(dt / 1000, total_col)
     player_.draw(screen)
 
-    for eg in end_gate:  # ce dosezemo ciljno ograjo in imamo kljuc, je konec
+    for eg in end_gate:  # check if  we reached the end gate and have the key in our inventory
         if pygame.Rect.colliderect(eg, player_.newrect) and "key" in player_.inventory:
             game_won(screen)
             sys.exit()
 
-    for gate in gate:  # prehodi med mapami
+    for gate in gates:  # gates between maps (not end gate)
         if pygame.Rect.colliderect(gate["rect"], player_.newrect) and mc_counter < 0:
             if gate["to"] == "map2":
                 tmx_map = tmx_map2
             elif gate["to"] == "map1":
                 tmx_map = tmx_map1
-            set_map(tmx_map)  # ko prestavimo map, je potrebno pocakati vsaj eno sekundo
+            set_map(tmx_map)  # there needs to be a cooldown after travelling between maps, otherwise it cycles
             mc_counter = 120
 
-    for lik in characters:  # posodobitev likov
+    for lik in characters:  # update characters
         if lik != None:
             lik.update(dt / 1000)
             lik.draw(screen)
@@ -288,5 +288,5 @@ while running:
     if instructions:
         begin_game()
 
-    # posodobitev zaslona
+    # update the screen
     pygame.display.flip()

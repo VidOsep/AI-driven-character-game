@@ -3,7 +3,7 @@ import os
 import math
 import conversation
 
-# stanja
+# states
 WALK_U = "walk_u"
 WALK_D = "walk_d"
 WALK_R = "walk_r"
@@ -19,31 +19,31 @@ DOWN = "down"
 RIGHT = "right"
 LEFT = "left"
 
-# animacijski frami
-frames_i_u = ["\\pomozne-datoteke\\liki\\igralec\\i_u_1.png", "\\pomozne-datoteke\\liki\\igralec\\i_u_2.png", "\\pomozne-datoteke\\liki\\igralec\\i_u_3.png",
-              "\\pomozne-datoteke\\liki\\igralec\\i_u_4.png"]
-frames_i_r = ["\\pomozne-datoteke\\liki\\igralec\\i_r_1.png", "\\pomozne-datoteke\\liki\\igralec\\i_r_2.png", "\\pomozne-datoteke\\liki\\igralec\\i_r_3.png",
-              "\\pomozne-datoteke\\liki\\igralec\\i_r_4.png"]
-frames_i_d = ["\\pomozne-datoteke\\liki\\igralec\\i_d_1.png", "\\pomozne-datoteke\\liki\\igralec\\i_d_2.png", "\\pomozne-datoteke\\liki\\igralec\\i_d_3.png",
-              "\\pomozne-datoteke\\liki\\igralec\\i_d_4.png"]
-frames_i_l = ["\\pomozne-datoteke\\liki\\igralec\\i_l_1.png", "\\pomozne-datoteke\\liki\\igralec\\i_l_2.png", "\\pomozne-datoteke\\liki\\igralec\\i_l_3.png",
-              "\\pomozne-datoteke\\liki\\igralec\\i_l_4.png"]
+# animation frames
+frames_i_u = ["\\assets\\character-sprites\\player\\i_u_1.png", "\\assets\\character-sprites\\player\\i_u_2.png", "\\assets\\character-sprites\\player\\i_u_3.png",
+              "\\assets\\character-sprites\\player\\i_u_4.png"]
+frames_i_r = ["\\assets\\character-sprites\\player\\i_r_1.png", "\\assets\\character-sprites\\player\\i_r_2.png", "\\assets\\character-sprites\\player\\i_r_3.png",
+              "\\assets\\character-sprites\\player\\i_r_4.png"]
+frames_i_d = ["\\assets\\character-sprites\\player\\i_d_1.png", "\\assets\\character-sprites\\player\\i_d_2.png", "\\assets\\character-sprites\\player\\i_d_3.png",
+              "\\assets\\character-sprites\\player\\i_d_4.png"]
+frames_i_l = ["\\assets\\character-sprites\\player\\i_l_1.png", "\\assets\\character-sprites\\player\\i_l_2.png", "\\assets\\character-sprites\\player\\i_l_3.png",
+              "\\assets\\character-sprites\\player\\i_l_4.png"]
 
 
 class Player(pygame.sprite.Sprite):
     """
-    Class igralca, skrbi za premikanje, animacijo in interakcije z ostalimi objekti
+    
     """
     def __init__(self, position):
         super().__init__()
 
         self.position = position
-        self.velocity = [0, 0] # hitrost kot 2d vektor
-        self.v_max = 50 # maks. hitrost
+        self.velocity = [0, 0] 
+        self.v_max = 50 # max velocity
         self.newrect = None
 
         self.in_convo_with = None
-        self.min_rad = 70 # radij okoli lika, v katerem mora igralec biti, da lahko zacne pogovor z likom
+        self.min_rad = 70 # radius of possible conversation area around characters
 
         self.state = IDLE_R
         self.orientation = RIGHT
@@ -54,10 +54,10 @@ class Player(pygame.sprite.Sprite):
         self.t_ = 0
         self.ix = 0
 
-        self.inventory = [] # igralceva lastnina
+        self.inventory = [] # players inventory
 
     def update(self, dt, bg_collision):
-        # posodobi lokacijo, animacijo
+        # update position and image
         collides = False
         newpos = [self.position[0] + self.velocity[0] * dt, self.position[1] + self.velocity[1] * dt]
         self.newrect = pygame.rect.Rect(newpos, (32, 32))
@@ -73,7 +73,7 @@ class Player(pygame.sprite.Sprite):
         self.t_ += 1
 
     def move(self, dir):
-        # posodobi stanje in hitrost
+        # update state and velocity
         if dir == "right":
             self.velocity = (self.v_max, 0)
             self.set_state(WALK_R)
@@ -88,7 +88,7 @@ class Player(pygame.sprite.Sprite):
             self.set_state(WALK_D)
 
     def stop(self):
-        # se ustavi in spremeni stanje na IDLE
+        # stop, change state to idle
         self.velocity = [0, 0]
         if self.state == WALK_U:
             self.set_state(IDLE_U)
@@ -100,14 +100,14 @@ class Player(pygame.sprite.Sprite):
             self.set_state(IDLE_L)
 
     def talk(self, text):
-        # poslje naprej sporocilo text
+        # send message to character 
         self.in_convo_with.respond_to_talk(text)
 
         if "#" in self.in_convo_with.reply:
             self.inventory.append("key")
 
     def load_animations(self):
-        # shrani vse slike v en dict
+        # load all images to a dictionary
         self.animations = {
             WALK_U: self.load_animation(WALK_U),
             WALK_D: self.load_animation(WALK_D),
@@ -120,7 +120,7 @@ class Player(pygame.sprite.Sprite):
         }
 
     def load_animation(self, state):
-        # vrne list z slikami
+        # return list with animation images
         animation_frames = []
         if state == WALK_U:
             for addr in frames_i_u:
@@ -151,7 +151,7 @@ class Player(pygame.sprite.Sprite):
         return animation_frames
 
     def set_state(self, state):
-        # spremeni stanje in animacijo
+        # change state and current animation
         if state in self.animations:
             self.state = state
             self.current_animation = self.animations[state]
@@ -164,11 +164,11 @@ class Player(pygame.sprite.Sprite):
         self.current_frame = self.current_animation[self.ix]
 
     def draw(self, screen):
-        # izrise trenutni frame
+        # draw current frame
         screen.blit(self.current_frame, self.position)
 
     def start_convo(self, liki):
-        # preveri ce je v zadostni blizini drugih likov, za zacetek pogovora
+        # check if player is close enough to initiate convo, start if true
         for lik in liki:
             if math.sqrt((self.position[0] - lik.position[0]) ** 2 + (
                     self.position[1] - lik.position[1]) ** 2) < self.min_rad:
@@ -177,14 +177,14 @@ class Player(pygame.sprite.Sprite):
                     self.in_convo_with.active_convo = conversation.Conversation()
                     self.in_convo_with.active_convo.setup(self.in_convo_with.setup_text)
                 else:
-                    if len(self.inventory) > 0: # igralec je nabral stvari, torej jih nastejemo
+                    if len(self.inventory) > 0: # Check if the player brought what was required
                         self.in_convo_with.active_convo.setup(
                             "~The player has returned with the following things in his inventory: " + ", ".join(
                                 self.inventory) + ".")
-                    else: # igralec ni nicesar nabral
+                    else: # He didn't bring anything
                         self.in_convo_with.active_convo.setup("~The player has returned with nothing in his inventory.")
                 return True
 
     def interact(self, col):
-        # igralec pobere stvar, ki je istanca classa Collectible
+        # player interaction with collectible, it gets added to the inventory
         self.inventory.append(col.type)

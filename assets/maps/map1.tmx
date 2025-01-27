@@ -5,17 +5,17 @@
  <tileset firstgid="82" source="ts3 - Paths.tsx"/>
  <tileset firstgid="98" source="ts4 - Osnovno rastlinje.tsx"/>
  <tileset firstgid="143" source="ts5- Fence.tsx"/>
- <layer id="1" name="ozadje" width="30" height="20">
+ <layer id="1" name="background" width="30" height="20">
   <data encoding="base64" compression="zlib">
    eJy1lE0OgyAQhcF22ZjUTWvS9hx6AOPS+9+mkELy8jojP+LihQjCN2+YwRpjOtIkzKF6py3IhjkL6zax/+J0CxzWosxPxI378RztTNyf+qeEG32+G3BX+r47jcS1gZXrgbnMkHKPXiNXynUud+8+NS779OMchPl5kkYlxtqaeigMzW8qvxrXcwYYS84oqedVuF9kR4+pGGr66GV+fc9s5En5Hg5yNbbER2EsWl1xjUl1prE38++X4+grvDK72+FrceT4bcnn9+YodyF+TgwtuKU5uJ7IZT7qs8ONuSt5y3JV278tuNLbcrZ8H30BOdFrfw==
   </data>
  </layer>
- <layer id="3" name="okras" width="30" height="20">
+ <layer id="3" name="decoration" width="30" height="20">
   <data encoding="base64" compression="zlib">
    eJxjYBhYkAzEKWhidXjU91LBfBDIAeJcEs0ixR5qm48L0MsefKBygO0fCqACh3gPXV0xCgYKkFpujUTQTaS6JCrZ18dAWrxkk6AWXx02CkYOAAD+PQrn
   </data>
  </layer>
- <layer id="2" name="poti" width="30" height="20">
+ <layer id="2" name="paths" width="30" height="20">
   <data encoding="base64" compression="zlib">
    eJxjYMAEYVjE6AFG7R21lxYgGogjBsjukRbWo/ZSFyTgwMPVv7jAaB6mHwCFdQIZeKDiB5t7EwfILegAAD1JEIA=
   </data>
@@ -30,7 +30,7 @@
    eJztw7ENADAIA7D8fwH02rKyMtuSk61mzxcAAC4+tYwBzA==
   </data>
  </layer>
- <layer id="7" name="prehodi" width="30" height="20" visible="0">
+ <layer id="7" name="gates" width="30" height="20" visible="0">
   <properties>
    <property name="to" value="map2"/>
   </properties>
@@ -38,11 +38,11 @@
    eJxjYBgFo2AUjIJRMBiB6kA7YBSMglFANgAAlCAAJg==
   </data>
  </layer>
- <objectgroup id="5" name="liki">
-  <object id="1" name="starec" x="228.689" y="205.389">
+ <objectgroup id="5" name="characters">
+  <object id="1" name="old-man" x="228.689" y="205.389">
    <point/>
   </object>
-  <object id="2" name="zacetek" x="102.815" y="196.818">
+  <object id="2" name="start" x="102.815" y="196.818">
    <point/>
   </object>
   <object id="3" name="pos_p" x="9.14463" y="199.071">

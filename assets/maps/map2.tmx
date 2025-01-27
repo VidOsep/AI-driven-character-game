@@ -4,17 +4,17 @@
  <tileset firstgid="78" source="ts2 - Water.tsx"/>
  <tileset firstgid="82" source="ts3 - Paths.tsx"/>
  <tileset firstgid="98" source="ts4 - Osnovno rastlinje.tsx"/>
- <layer id="1" name="ozadje" width="30" height="20">
+ <layer id="1" name="background" width="30" height="20">
   <data encoding="base64" compression="zlib">
    eJy9lMsOwiAQRam6NCZ2Y9248Bfc1MQtsKPt//+M0wSSmwmvIejiJA20PcxlYFBKHf7MkTgTcwSdGO/BJePdOUXGPg0e/g33DiyPB2Er/vsWzqH3Sbz8e0jYj57Zo1f7Z3ReiYm4C725+mM534gx4qvFCOu1zC31SXut1M88N1uRYa03ZNujXyTe5cfu1DlawD0BYR1ayc6PKTi5l5NaR2svcRyxeZcrrKN1L7Bu4+vNuRCXcUvvsZg31O9gboX51LmT5C6tN5Z3y3lG7wZ1reDC/ec9N3bwtoB+qbfUxxJ/Lfv9/wXRxnoE
   </data>
  </layer>
- <layer id="3" name="okras" width="30" height="20">
+ <layer id="3" name="decoration" width="30" height="20">
   <data encoding="base64" compression="zlib">
    eJxjYBgFhEAHEHcOtCOoCCqAOGkA7ASBbDrbiw8kA3EKlc3EFa6pQJwGZecAcS6V7cUVrnlAnE9lu3ABeqcpGBhMaWq4g6IBtLt7gOwnZGctXVyBaScM0wP0YbGfngDd/qECAG1NDR8=
   </data>
  </layer>
- <layer id="2" name="poti" width="30" height="20">
+ <layer id="2" name="paths" width="30" height="20">
   <data encoding="base64" compression="zlib">
    eJxjYBgFo2AUjILhAxLQcMQAuSMai1vw4cHizsQBcscoGAXDDQAAersIiA==
   </data>
@@ -24,7 +24,7 @@
    eJzFlsEKACAIQ/1n/x+iW4imGZuBl8y9ZRGpiOhQsEfGjXK/fm09qxentsdB8b39TnHZfb7NVXJdLpqF1nzher1mcK0HJjfKoXxUNRF3C7E206loRW9a10fn7Lx7yODaOib3t37qf7NjAWKFQgo=
   </data>
  </layer>
- <layer id="8" name="prehodi" width="30" height="20" visible="0">
+ <layer id="8" name="gates" width="30" height="20" visible="0">
   <properties>
    <property name="to" value="map1"/>
   </properties>
@@ -33,37 +33,37 @@
   </data>
  </layer>
  <objectgroup id="13" name="collectibles">
-  <object id="8" name="jagoda" x="223.753" y="239.774">
+  <object id="8" name="strawberry" x="223.753" y="239.774">
    <point/>
   </object>
-  <object id="9" name="jagoda" x="240.308" y="223.219">
+  <object id="9" name="strawberry" x="240.308" y="223.219">
    <point/>
   </object>
-  <object id="10" name="jagoda" x="271.815" y="254.192">
+  <object id="10" name="strawberry" x="271.815" y="254.192">
    <point/>
   </object>
-  <object id="11" name="jagoda" x="272.349" y="270.747">
+  <object id="11" name="strawberry" x="272.349" y="270.747">
    <point/>
   </object>
-  <object id="12" name="jabolko" x="112.144" y="126.562">
+  <object id="12" name="apple" x="112.144" y="126.562">
    <point/>
   </object>
-  <object id="13" name="jabolko" x="127.63" y="142.583">
+  <object id="13" name="apple" x="127.63" y="142.583">
    <point/>
   </object>
-  <object id="14" name="jabolko" x="160.205" y="125.494">
+  <object id="14" name="apple" x="160.205" y="125.494">
    <point/>
   </object>
-  <object id="15" name="goba" x="207.733" y="46.4595">
+  <object id="15" name="mushroom" x="207.733" y="46.4595">
    <point/>
   </object>
-  <object id="16" name="goba" x="224.287" y="46.4595">
+  <object id="16" name="mushroom" x="224.287" y="46.4595">
    <point/>
   </object>
-  <object id="17" name="goba" x="239.774" y="46.4595">
+  <object id="17" name="mushroom" x="239.774" y="46.4595">
    <point/>
   </object>
-  <object id="18" name="goba" x="223.753" y="62.48">
+  <object id="18" name="mushroom" x="223.753" y="62.48">
    <point/>
   </object>
  </objectgroup>
