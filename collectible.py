@@ -4,31 +4,32 @@ import os
 scaled_tile_width = 32
 scaled_tile_height = 32
 
-# zloadamo in povecamo slike
-jabolko_img = pygame.image.load(os.getcwd() + "\\assets\\jabolko.png")
-jabolko_img = pygame.transform.scale(jabolko_img, (scaled_tile_width, scaled_tile_height))
+# load and scale images
+apple_img = pygame.image.load(os.getcwd() + "\\assets\\collectibles\\apple.png")
+apple_img = pygame.transform.scale(apple_img, (scaled_tile_width, scaled_tile_height))
 
-jagoda_img = pygame.image.load(os.getcwd() + "\\assets\\jagoda.png")
-jagoda_img = pygame.transform.scale(jagoda_img, (scaled_tile_width, scaled_tile_height))
+strawberry_img = pygame.image.load(os.getcwd() + "\\assets\\collectibles\\strawberry.png")
+strawberry_img = pygame.transform.scale(strawberry_img, (scaled_tile_width, scaled_tile_height))
 
-goba_img = pygame.image.load(os.getcwd() + "\\assets\\goba.png")
-goba_img = pygame.transform.scale(goba_img, (scaled_tile_width, scaled_tile_height))
+mushroom_img = pygame.image.load(os.getcwd() + "\\assets\\collectibles\\mushroom.png")
+mushroom_img = pygame.transform.scale(mushroom_img, (scaled_tile_width, scaled_tile_height))
 
 
 class Collectible(pygame.sprite.Sprite):
     """
-    Collectible je statičen objekt, ki ga igralec lahko pobere in pospravi v svojo lastnino
+    An object, that the player can interact with and pick up.
+    Three types exist: apple, mushroom and strawberry.
     """
 
     def __init__(self, position, type):
         super().__init__()
 
-        if type == "goba":  # mozni so trije tipi
-            self.image = goba_img
-        elif type == "jagoda":
-            self.image = jagoda_img
-        elif type == "jabolko":
-            self.image = jabolko_img
+        if type == "mushroom":
+            self.image = mushroom_img
+        elif type == "strawberry":
+            self.image = strawberry_img
+        elif type == "apple":
+            self.image = apple_img
 
         self.rect = self.image.get_rect()
         self.rect.topleft = position

@@ -20,14 +20,14 @@ RIGHT = "right"
 LEFT = "left"
 
 # animacijski frami
-frames_i_u = ["\\spriti\\igralec\\i_u_1.png", "\\spriti\\igralec\\i_u_2.png", "\\spriti\\igralec\\i_u_3.png",
-              "\\spriti\\igralec\\i_u_4.png"]
-frames_i_r = ["\\spriti\\igralec\\i_r_1.png", "\\spriti\\igralec\\i_r_2.png", "\\spriti\\igralec\\i_r_3.png",
-              "\\spriti\\igralec\\i_r_4.png"]
-frames_i_d = ["\\spriti\\igralec\\i_d_1.png", "\\spriti\\igralec\\i_d_2.png", "\\spriti\\igralec\\i_d_3.png",
-              "\\spriti\\igralec\\i_d_4.png"]
-frames_i_l = ["\\spriti\\igralec\\i_l_1.png", "\\spriti\\igralec\\i_l_2.png", "\\spriti\\igralec\\i_l_3.png",
-              "\\spriti\\igralec\\i_l_4.png"]
+frames_i_u = ["\\pomozne-datoteke\\liki\\igralec\\i_u_1.png", "\\pomozne-datoteke\\liki\\igralec\\i_u_2.png", "\\pomozne-datoteke\\liki\\igralec\\i_u_3.png",
+              "\\pomozne-datoteke\\liki\\igralec\\i_u_4.png"]
+frames_i_r = ["\\pomozne-datoteke\\liki\\igralec\\i_r_1.png", "\\pomozne-datoteke\\liki\\igralec\\i_r_2.png", "\\pomozne-datoteke\\liki\\igralec\\i_r_3.png",
+              "\\pomozne-datoteke\\liki\\igralec\\i_r_4.png"]
+frames_i_d = ["\\pomozne-datoteke\\liki\\igralec\\i_d_1.png", "\\pomozne-datoteke\\liki\\igralec\\i_d_2.png", "\\pomozne-datoteke\\liki\\igralec\\i_d_3.png",
+              "\\pomozne-datoteke\\liki\\igralec\\i_d_4.png"]
+frames_i_l = ["\\pomozne-datoteke\\liki\\igralec\\i_l_1.png", "\\pomozne-datoteke\\liki\\igralec\\i_l_2.png", "\\pomozne-datoteke\\liki\\igralec\\i_l_3.png",
+              "\\pomozne-datoteke\\liki\\igralec\\i_l_4.png"]
 
 
 class Player(pygame.sprite.Sprite):

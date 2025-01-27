@@ -1,7 +1,7 @@
 import pygame
 import os
 
-# mozna stanja
+# states
 IDLE_U = "idle_u"
 IDLE_D = "idle_d"
 IDLE_R = "idle_r"
@@ -18,14 +18,14 @@ font = pygame.font.SysFont(None, 20)
 
 class Agent(pygame.sprite.Sprite):
     """
-    Lik, zanj predpostavljamo da je staticen, torej se ne premika in ima konstantno smer.
+    A static character, that the player can initiate a dialog with.
     """
 
     def __init__(self, position, animation_path):
         super().__init__()
         self.position = position
 
-        self.state = IDLE_R  # zacetni state
+        self.state = IDLE_R  # initial state
         self.orientation = RIGHT
 
         self.animation_path = animation_path
@@ -40,29 +40,29 @@ class Agent(pygame.sprite.Sprite):
         self.offset_x = 30
         self.offset_y = -30
 
-        self.active_convo = None  # je pogovor aktiven?
+        self.active_convo = None  # is the dialog active?
         self.setup_text = ""
 
     def update(self, dt):
-        # animacija
+        # animation
         if self.t_ / 60 > 1 / 4:
             self.next_animation()
             self.t_ = 0
         self.t_ += 1
 
     def respond_to_talk(self, text):
-        # odziv lika na govor igralca
+        # agent responds to player prompt
         self.reply = self.active_convo.new_prompt(text)
 
     def load_animation(self):
-        # vrni list z slikami
+        # animation frames loading
         animation_frames = []
         for i in range(1, 5):
             animation_frames.append(pygame.image.load(os.getcwd() + self.animation_path + str(i) + ".png"))
         return animation_frames
 
     def scale_char(self, n):
-        # skalira animacijske frame za faktor n
+        # scaling animation frames
         for i in range(len(self.animation_frames)):
             x_size = self.animation_frames[i].get_width()
             y_size = self.animation_frames[i].get_height()
@@ -76,7 +76,7 @@ class Agent(pygame.sprite.Sprite):
         self.current_frame = self.animation_frames[self.ix]
 
     def draw_line(self, line, x, y, screen):
-        # izpise vrstico teksta
+        # display a line of text
         text_surface = font.render(line, False, (0, 0, 0))
         text_rect = text_surface.get_rect()
         text_rect = text_rect.move((x - 5, y - 5))
@@ -86,7 +86,7 @@ class Agent(pygame.sprite.Sprite):
         screen.blit(text_surface, (x, y))
 
     def draw_text(self, screen):
-        # izpise celotno tekstovno sporocilo
+        # display the whole character response
         ix = 0
         row = 0
         for i in range(len(self.reply)):
@@ -101,7 +101,7 @@ class Agent(pygame.sprite.Sprite):
             ix += 1
 
     def draw(self, screen):
-        # izrise sebe in tekst, če ta obstaja
+        # draws itself on the screen and displays the reply, if it exists
         screen.blit(self.current_frame, self.position)
         if self.reply != "":
             self.draw_text(screen)

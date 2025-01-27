@@ -8,7 +8,7 @@ import agent
 import pygame_textinput
 import collectible
 
-# smeri premika
+# possible directions
 UP = "up"
 DOWN = "down"
 RIGHT = "right"
@@ -17,66 +17,64 @@ LEFT = "left"
 pygame.init()
 clock = pygame.time.Clock()
 
-tile_scale = 2  # za koliko povecamo tile
+tile_scale = 2 
 screen = pygame.display.set_mode((1, 1))
 
-# zloadamo mapi
-tmx_map1 = pytmx.load_pygame(os.getcwd() + "\\assets\\zacetek.tmx")
-tmx_map2 = pytmx.load_pygame(os.getcwd() + "\\assets\\map2.tmx")
-tmx_map = tmx_map1  # Aktivna mapa
+# load maps
+tmx_map1 = pytmx.load_pygame(os.getcwd() + "\\assets\\maps\\map1.tmx")
+tmx_map2 = pytmx.load_pygame(os.getcwd() + "\\assets\\maps\\map2.tmx")
+tmx_map = tmx_map1  # currently displayed map
 
-# zacetni zaslon
-start_screen = pygame.image.load(os.getcwd() + "\\assets\\zacetni_zaslon.png")
+# starting screen
+start_screen = pygame.image.load(os.getcwd() + "\\assets\\start-screen.png")
 
-# racun dimenzij posameznega tila
 scaled_tile_width = tmx_map.tilewidth * tile_scale
 scaled_tile_height = tmx_map.tileheight * tile_scale
 
-# racun dimenzij cele mape
+# map dimensions
 scaled_map_width = tmx_map.width * scaled_tile_width
 scaled_map_height = tmx_map.height * scaled_tile_height
 
 screen = pygame.display.set_mode((scaled_map_width, scaled_map_height))
 
-# ali smo trenutno v pogovoru
 is_conversation = False
 is_typing = False
 
-# dimenzije tekstnega vhoda
+# input box dimensions
 t_x = 40
 t_y = scaled_map_height - 80
 t_w = 200
 font = pygame.font.SysFont(None, 100)
 
-player_ = player.Player([0, 0])
-oldman_ = None
+player_ = player.Player([0, 0]) # player instance
+oldman_ = None 
 
 bg_collision = []
-prehod = []
+gate = []
 collectibles = []
-liki = []
+characters = []
 end_gate_layer = tmx_map1.get_layer_by_name("end_gate")
 end_gate_layer.visible = True
 
 
 def set_map(tmap):
-    # postavi cel svet
+    # setup the whole map at the beginning
     global tmx_map
-    global prehod
+    global gate
     global bg_collision
     global player_
     global oldman_
     global collectibles
-    global liki
+    global characters
     global end_gate
-    prehod = []
+    gate = []
     bg_collision = []
     collectibles = []
     end_gate = []
-    liki = []
+    characters = []
     tmx_map = tmap
 
-    # iz tiled mape preverjamo posebne tile in jih posebej shranjujemo
+    # classifying special tiles, collision boxes, gates
     for layer in tmx_map.layers:
         if layer.name == "collision":
             for obj in layer.tiles():
@@ -85,37 +83,37 @@ def set_map(tmap):
         if layer.name == "prehodi":
             for p in layer.tiles():
                 props = layer.properties
-                prehod.append({"to": props.get("to"),
+                gate.append({"to": props.get("to"),
                                "rect": pygame.rect.Rect(tile_scale * 16 * p[0], tile_scale * 16 * p[1], 32, 32)})
         if layer.name == "end_gate":
             for p in layer.tiles():
                 end_gate.append(pygame.rect.Rect(tile_scale * 16 * p[0], tile_scale * 16 * p[1], 32, 32))
 
     temp = player_.position
-    for obj in tmx_map.objects:  # iz tmx mape dobimo zacetne polozaje nasih likov
-        if obj.name == "zacetek" and temp[0] == 0 and temp[1] == 0:
+    for obj in tmx_map.objects:  # get intitial character positions from tmx file
+        if obj.name == "start" and temp[0] == 0 and temp[1] == 0:
             player_object = obj
             player_ = player.Player([player_object.x * tile_scale, player_object.y * tile_scale])
         if obj.name == "pos_p" and (temp[0] != 0 or temp[1] != 0):
             player_object = obj
             player_.position = [player_object.x * tile_scale, player_object.y * tile_scale]
-        if obj.name == "starec":
+        if obj.name == "old-man":
             if oldman_ == None:
                 oldman_object = obj
                 oldman_ = agent.Agent([oldman_object.x * tile_scale, oldman_object.y * tile_scale],
-                                      "\\spriti\\starec\\s_")
-            liki.append(oldman_)
-        if obj.name == "goba":
-            collectibles.append(collectible.Collectible([obj.x * tile_scale, obj.y * tile_scale], "goba"))
-        if obj.name == "jagoda":
-            collectibles.append(collectible.Collectible([obj.x * tile_scale, obj.y * tile_scale], "jagoda"))
-        if obj.name == "jabolko":
-            collectibles.append(collectible.Collectible([obj.x * tile_scale, obj.y * tile_scale], "jabolko"))
+                                      "\\pomozne-datoteke\\liki\\starec\\s_")
+            characters.append(oldman_)
+        if obj.name == "mushroom":
+            collectibles.append(collectible.Collectible([obj.x * tile_scale, obj.y * tile_scale], "mushroom"))
+        if obj.name == "strawberry":
+            collectibles.append(collectible.Collectible([obj.x * tile_scale, obj.y * tile_scale], "strawberry"))
+        if obj.name == "apple":
+            collectibles.append(collectible.Collectible([obj.x * tile_scale, obj.y * tile_scale], "apple"))
 
 
 def game_over(screen):
-    # neuspesen konec igre
-    text_surface = font.render("IZGUBIL SI\nlepše se obnašaj naslednjič", False, (0, 0, 0))
+    # unsuccessful ending
+    text_surface = font.render("YOU LOST\nBetter luck next time.", False, (0, 0, 0))
     text_rect = text_surface.get_rect()
     text_rect = pygame.Rect.move(text_rect, (
         (scaled_map_width / 2) - (text_rect.width / 2), (scaled_map_height / 2) - (text_rect.height / 2) - 150))
@@ -131,8 +129,8 @@ def game_over(screen):
 
 
 def game_won(screen):
-    # uspesen konec igre
-    text_surface = font.render("Čestitke,\nzmagal si!", False, (0, 0, 0))
+    # successful ending
+    text_surface = font.render("CONGRATULATIONS,\nyou have won!", False, (0, 0, 0))
     text_rect = text_surface.get_rect()
     text_rect = pygame.Rect.move(text_rect, (
         (scaled_map_width / 2) - (text_rect.width / 2), (scaled_map_height / 2) - (text_rect.height / 2) - 150))
@@ -155,9 +153,12 @@ def begin_game():
     screen.blit(start_screen, s_rect)
 
 
-set_map(tmx_map1)  # zacetna mapa
+set_map(tmx_map1)  # starting map
 
-# zacetna avodila za AI lik
+"""
+ Here follows the intial system prompt for the api.
+ This text determines the characters (old man) behaviour and assigns it its tasks.
+"""
 oldman_.setup_text = "Please pretend to be a character in a video game i am making. Keep your answers brief, at most 15 words. The " \
                      "conversation will be in slovenian language. You are an old man Albert, and you have a key, that" \
                      "unlocks the gate to the treasure. The player must fetch something for Albert, to get the key." \
@@ -173,17 +174,17 @@ oldman_.setup_text = "Please pretend to be a character in a video game i am maki
                      "But if the player is too rude, " \
                      "end the conversation with & sign at the end."
 
-# glavna zanka
+# main loop
 running = True
 instructions = True
-mc_counter = 0  # stevec za prehode med mapami
+mc_counter = 0  # counter for gate travel cooldown 
 begin_game()
 while running:
     dt = clock.tick(60)
     mc_counter -= 1
     events = pygame.event.get()
 
-    # preverimo vse dogodke
+    # check all events
     events2 = []
     for event in events:
         if event.type == pygame.QUIT:
@@ -191,7 +192,7 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_t:
                 if not is_conversation:
-                    is_conversation = player_.start_convo(liki)
+                    is_conversation = player_.start_convo(characters)
                     # zacetek besedne interakcije: pogovora
                     if is_conversation:
                         textinput = pygame_textinput.TextInputVisualizer()
@@ -270,7 +271,7 @@ while running:
             game_won(screen)
             sys.exit()
 
-    for gate in prehod:  # prehodi med mapami
+    for gate in gate:  # prehodi med mapami
         if pygame.Rect.colliderect(gate["rect"], player_.newrect) and mc_counter < 0:
             if gate["to"] == "map2":
                 tmx_map = tmx_map2
@@ -279,7 +280,7 @@ while running:
             set_map(tmx_map)  # ko prestavimo map, je potrebno pocakati vsaj eno sekundo
             mc_counter = 120
 
-    for lik in liki:  # posodobitev likov
+    for lik in characters:  # posodobitev likov
         if lik != None:
             lik.update(dt / 1000)
             lik.draw(screen)
